@@ -1,10 +1,18 @@
 package com.info.model;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "people")
 public class Person {
-	
-	private String name;
-	private int age;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(nullable = false)
+	private String name;
+	
+	private int age;
 	
 	public String getName() {
 		return name;

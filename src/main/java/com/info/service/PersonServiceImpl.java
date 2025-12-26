@@ -1,131 +1,90 @@
 package com.info.service;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-import javax.jws.WebService;
-
-import com.info.db.ConnexionDB;
+import com.info.db.JPAUtil;
 import com.info.model.Person;
 
-@WebService(endpointInterface = "com.info.service.PersonService")
-public class PersonServiceImpl implements PersonService {
-	
-	Connection cn = ConnexionDB.getConnexion();
-	Statement st = null;
+public class PersonServiceImpl {
 
-	@Override
-	public boolean addPerson(Person p) {
-	    String sql = "INSERT INTO `person` (`Name`, `Age`) VALUES ('" + p.getName() + "'," + p.getAge() + ")";
-	    try {
-	        st = (Statement) cn.createStatement();
-	        st.executeUpdate(sql);
-	        System.out.println("Ajout avec succés");
-	        return true;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        System.out.println("Erreur add");
-	        return false;
-	    }
-	}
+    private EntityManager em;
 
-	@Override
-	public boolean deletePerson(int id) {
+    // entity manager
+    public PersonServiceImpl() {
+        em = JPAUtil.getEMF().createEntityManager();
+    }
 
-	    String sql = "DELETE FROM `person` WHERE id=" + id;
+    public boolean addPerson(Person p) {
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(p); // ORM: persist the Person object
+            tx.commit();
+            System.out.println("Ajout avec succès");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx.isActive()) tx.rollback();
+            System.out.println("Erreur add");
+            return false;
+        }
+    }
 
-	    try {
-	        st = cn.createStatement();
-	        st.executeUpdate(sql);
+    public boolean deletePerson(int id) {
+        EntityTransaction tx = em.getTransaction();
+        try {
+            Person p = em.find(Person.class, id);
+            if (p == null) return false;
 
-	        return true;
-	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.out.println(e.getMessage());
-	        return false;
-	    }
-	}
+            tx.begin();
+            em.remove(p);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx.isActive()) tx.rollback();
+            System.out.println("Erreur delete");
+            return false;
+        }
+    }
 
-	@Override
-	public Person getPerson(int id) {
-	    Person person = null;
+    public Person getPerson(int id) {
+        try {
+            return em.find(Person.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
-	    String sql = "SELECT `ID`, `Name`, `Age` FROM `person` WHERE id=" + id;
+    public Person getPersonByName(String name) {
+        try {
+            TypedQuery<Person> query = em.createQuery(
+                    "SELECT p FROM Person p WHERE p.name = :name", Person.class
+            );
+            query.setParameter("name", name);
+            List<Person> results = query.getResultList();
+            return results.isEmpty() ? null : results.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
-	    try {
-	        st = cn.createStatement();
-	        ResultSet rs = st.executeQuery(sql);
-
-	        while (rs.next()) {
-	            person = new Person();
-	            person.setId(rs.getInt("id"));
-	            person.setAge(rs.getInt("age"));
-	            person.setName(rs.getString("name"));
-	        }
-
-	        return person;
-
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.out.println(e.getMessage());
-	        return null;
-	    }
-	}
-	
-	@Override
-	public Person getPersonByName(String name) {
-
-	    Person person = null;
-
-	    String sql = "SELECT `ID`, `Name`, `Age` FROM `person` WHERE name='" + name + "'";
-
-	    try {
-	        st = cn.createStatement();
-	        ResultSet rs = st.executeQuery(sql);
-
-	        while (rs.next()) {
-	            person = new Person();
-	            person.setId(rs.getInt("id"));
-	            person.setAge(rs.getInt("age"));
-	            person.setName(rs.getString("name"));
-	        }
-
-	        return person;
-
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.out.println(e.getMessage());
-	        return null;
-	    }
-	}
-	
-	public Person[] getAllPersons() {
-	    List<Person> persons = new ArrayList<>();
-	    String sql = "SELECT * FROM `person`";
-	    try {
-	        st = (Statement) cn.createStatement();
-	        ResultSet rs = (ResultSet) st.executeQuery(sql);
-	        
-	        while (rs.next()) {
-	            Person person = new Person();
-	            person.setId(rs.getInt("id"));
-	            person.setName(rs.getString("Name"));
-	            person.setAge(rs.getInt("Age"));
-	            persons.add(person);
-	        }
-
-	        return persons.toArray(new Person[0]);
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        System.out.println(e.getMessage());
-	        return null;
-	    }
-	}
+    public Person[] getAllPersons() {
+        try {
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
+            List<Person> results = query.getResultList();
+            return results.toArray(new Person[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return new Person[0];
+        }
+    }
 }
