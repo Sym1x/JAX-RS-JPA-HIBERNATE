@@ -1,0 +1,20 @@
+# Eclipse project files
+/.classpath
+/.project
+/.settings/
+
+# Build output
+/bin/
+/build/
+/target/
+
+# Server and workspace files
+/.metadata/
+/tmp/
+/*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
