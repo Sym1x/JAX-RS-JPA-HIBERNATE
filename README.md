@@ -1,40 +1,8 @@
-\# People-System
+# People-System
 
 
 
-\*\*People-System\*\* est une application simple qui illustre l'utilisation des API JAX-RS avec Hibernate pour la gestion des personnes, accompagnée d'un frontend React + Vite. 
-
-
-
----
-
-
-
-\## 🛠️ Technologies utilisées
-
-
-
-\- \*\*Backend :\*\*
-
-&nbsp; - Java 17
-
-&nbsp; - JAX-RS (REST APIs)
-
-&nbsp; - Hibernate ORM
-
-&nbsp; - MySQL (ou toute autre base compatible)
-
-&nbsp; - CORS activé pour permettre les requêtes depuis le frontend en développement
-
-
-
-\- \*\*Frontend :\*\*
-
-&nbsp; - React
-
-&nbsp; - Vite
-
-&nbsp; - Axios pour simplifier les appels API
+**People-System** est une application simple qui illustre l'utilisation des API JAX-RS avec Hibernate pour la gestion des personnes, accompagnée d'un frontend React + Vite. 
 
 
 
@@ -42,17 +10,31 @@
 
 
 
-\## ⚡ Fonctionnalités
+## 🛠️ Technologies utilisées
 
 
 
-\- Création, lecture, mise à jour et suppression (CRUD) de personnes via l'API REST
+- **Backend :**
 
-\- Frontend simple permettant de visualiser et interagir avec les données
+ - Java 17
 
-\- Gestion des appels API avec Axios
+ - JAX-RS (REST APIs)
 
-\- Support du développement en local grâce à CORS
+ - Hibernate ORM
+
+ - MySQL (ou toute autre base compatible)
+
+ - CORS activé pour permettre les requêtes depuis le frontend en développement
+
+
+
+- **Frontend :**
+
+ - React
+
+ - Vite
+
+ - Axios pour simplifier les appels API
 
 
 
@@ -60,11 +42,29 @@
 
 
 
-\## 🚀 Installation et lancement
+## ⚡ Fonctionnalités
 
 
 
-\### Backend
+- Création, lecture, mise à jour et suppression (CRUD) de personnes via l'API REST
+
+- Frontend simple permettant de visualiser et interagir avec les données
+
+- Gestion des appels API avec Axios
+
+- Support du développement en local grâce à CORS
+
+
+
+---
+
+
+
+## 🚀 Installation et lancement
+
+
+
+### Backend
 
 1\. Cloner le dépôt :
 
@@ -78,7 +78,7 @@ git clone https://github.com/votre-utilisateur/people-system.git
 
 3\. Lancer le serveur JAX-RS via Eclipse.
 
-\### Frontend
+### Frontend
 
 1\. Lancer 'npm install' pour installer les dépendances.
 
@@ -90,7 +90,7 @@ git clone https://github.com/votre-utilisateur/people-system.git
 
 
 
-\## Remarques
+## Remarques
 
 * Les deux parties (frontend et backend) sont encore en développement.
 
