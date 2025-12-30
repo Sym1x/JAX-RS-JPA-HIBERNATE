@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import com.info.model.Person;
 import com.info.service.PersonServiceImpl;
 
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.core.Response;
 
 @Path("/users")
 public class RestRouter {
@@ -62,4 +64,26 @@ public class RestRouter {
 			return response;
 		}
 	}
+	
+	@PUT
+	@Path("/update/{id}/{name}/{age}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, Object> updateUser(
+	        @PathParam("id") int id,
+	        @PathParam("name") String name,
+	        @PathParam("age") int age) {
+
+	    Map<String, Object> response = new HashMap<>();
+
+	    boolean ok = ps.updatePerson(id, name, age);
+
+	    response.put("state", ok ? "ok" : "ko: id doesn't exist");
+	    return response;
+	}
+	
+	@OPTIONS
+	public Response handleOptions() {
+	    return Response.ok().build();
+	}
+
 }

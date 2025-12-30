@@ -21,7 +21,7 @@ public class PersonServiceImpl {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            em.persist(p); // ORM: persist the Person object
+            em.persist(p); // persist the Person object
             tx.commit();
             System.out.println("Ajout avec succès");
             return true;
@@ -61,6 +61,25 @@ public class PersonServiceImpl {
         }
     }
 
+    public boolean updatePerson(int id, String name, int age) {
+        EntityTransaction tx = em.getTransaction();
+        try {
+            Person p = em.find(Person.class, id);
+            if (p == null) return false;
+
+            tx.begin();
+            p.setName(name);
+            p.setAge(age);
+            tx.commit();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx.isActive()) tx.rollback();
+            return false;
+        }
+    }
+    
     public Person getPersonByName(String name) {
         try {
             TypedQuery<Person> query = em.createQuery(
