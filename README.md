@@ -22,7 +22,7 @@
 
  - Hibernate ORM
 
- - MySQL (ou toute autre base compatible)
+ - Postgres (ou toute autre base compatible, changer dans pom.xml et persistance.xml)
 
  - CORS activé pour permettre les requêtes depuis le frontend en développement
 
