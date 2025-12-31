@@ -16,7 +16,7 @@
 
 - **Backend :**
 
- - Java 17
+ - Java 8
 
  - JAX-RS (REST APIs)
 
